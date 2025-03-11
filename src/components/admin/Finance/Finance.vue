@@ -83,7 +83,8 @@ const goBack = () => {
 </script>
 
 <style scoped>
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   font-family: 'Arial', sans-serif;
@@ -120,11 +121,13 @@ body, html {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 h1 {
   text-align: center;
   margin-bottom: 20px;
@@ -183,12 +186,16 @@ h1 {
   color: #00796b;
 }
 
-.transaction-list, .payment-list, .report-list {
+.transaction-list,
+.payment-list,
+.report-list {
   list-style-type: none;
   padding: 0;
 }
 
-.transaction-list li, .payment-list li, .report-list li {
+.transaction-list li,
+.payment-list li,
+.report-list li {
   padding: 10px;
   border-bottom: 1px solid #ddd;
 }

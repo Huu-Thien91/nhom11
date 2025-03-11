@@ -1,168 +1,136 @@
 <template>
   <div>
     <button @click="goBack" class="back-button">← Quay lại</button>
-  <div class="settings-container">
-    <!-- Thanh Tab chuyển đổi giữa các phần cài đặt -->
-    <div class="settings-tabs">
-      <div
-        class="settings-tab"
-        :class="{ active: activeTab === 'account' }"
-        @click="activeTab = 'account'"
-      >
-        Tài khoản Admin
+    <div class="settings-container">
+      <!-- Thanh Tab chuyển đổi giữa các phần cài đặt -->
+      <div class="settings-tabs">
+        <div class="settings-tab" :class="{ active: activeTab === 'account' }" @click="activeTab = 'account'">
+          Tài khoản Admin
+        </div>
+        <div class="settings-tab" :class="{ active: activeTab === 'appearance' }" @click="activeTab = 'appearance'">
+          Giao diện
+        </div>
+        <div class="settings-tab" :class="{ active: activeTab === 'security' }" @click="activeTab = 'security'">
+          Bảo mật
+        </div>
+        <div class="settings-tab" :class="{ active: activeTab === 'payments' }" @click="activeTab = 'payments'">
+          Thanh toán & Gói đăng ký
+        </div>
+        <div class="settings-tab" :class="{ active: activeTab === 'streaming' }" @click="activeTab = 'streaming'">
+          Phát trực tuyến
+        </div>
+        <div class="settings-tab" :class="{ active: activeTab === 'system' }" @click="activeTab = 'system'">
+          Hệ thống
+        </div>
       </div>
-      <div
-        class="settings-tab"
-        :class="{ active: activeTab === 'appearance' }"
-        @click="activeTab = 'appearance'"
-      >
-        Giao diện
-      </div>
-      <div
-        class="settings-tab"
-        :class="{ active: activeTab === 'security' }"
-        @click="activeTab = 'security'"
-      >
-        Bảo mật
-      </div>
-      <div
-        class="settings-tab"
-        :class="{ active: activeTab === 'payments' }"
-        @click="activeTab = 'payments'"
-      >
-        Thanh toán & Gói đăng ký
-      </div>
-      <div
-        class="settings-tab"
-        :class="{ active: activeTab === 'streaming' }"
-        @click="activeTab = 'streaming'"
-      >
-        Phát trực tuyến
-      </div>
-      <div
-        class="settings-tab"
-        :class="{ active: activeTab === 'system' }"
-        @click="activeTab = 'system'"
-      >
-        Hệ thống
+
+      <!-- Nội dung các tab cài đặt -->
+      <div class="tab-content">
+        <!-- Tab: Tài khoản Admin -->
+        <div v-if="activeTab === 'account'">
+          <label for="name">Tên Admin:</label>
+          <input v-model="settings.account.name" id="name" type="text" />
+
+          <label for="email">Email:</label>
+          <input v-model="settings.account.email" id="email" type="email" />
+
+          <label for="phone">Số điện thoại:</label>
+          <input v-model="settings.account.phone" id="phone" type="text" />
+
+          <label for="password">Mật khẩu:</label>
+          <input v-model="settings.account.password" id="password" type="password" />
+
+          <label for="role">Vai trò:</label>
+          <select v-model="settings.account.role" id="role">
+            <option value="Super Admin">Super Admin</option>
+            <option value="Moderator">Moderator</option>
+            <option value="Editor">Editor</option>
+          </select>
+
+          <div class="switch-container">
+            <label>Bật 2FA</label>
+            <input v-model="settings.account.enable2FA" type="checkbox" />
+          </div>
+        </div>
+
+        <!-- Tab: Giao diện -->
+        <div v-if="activeTab === 'appearance'">
+          <label for="logo">Logo:</label>
+          <input @change="handleFileChange('logo', $event)" id="logo" type="file" />
+
+          <label for="favicon">Favicon:</label>
+          <input @change="handleFileChange('favicon', $event)" id="favicon" type="file" />
+
+          <label for="theme">Chủ đề giao diện:</label>
+          <select v-model="settings.appearance.theme" id="theme">
+            <option value="light">Sáng</option>
+            <option value="dark">Tối</option>
+          </select>
+
+          <label for="layout">Bố cục:</label>
+          <select v-model="settings.appearance.layout" id="layout">
+            <option value="grid">Lưới</option>
+            <option value="list">Danh sách</option>
+          </select>
+        </div>
+
+        <!-- Tab: Bảo mật -->
+        <div v-if="activeTab === 'security'">
+          <label for="passwordPolicy">Chính sách mật khẩu:</label>
+          <textarea v-model="settings.security.passwordPolicy" id="passwordPolicy"></textarea>
+
+          <div class="switch-container">
+            <label>Chặn tài khoản vi phạm</label>
+            <input v-model="settings.security.blockViolation" type="checkbox" />
+          </div>
+        </div>
+
+        <!-- Tab: Thanh toán -->
+        <div v-if="activeTab === 'payments'">
+          <label for="paymentGateway">Cổng thanh toán:</label>
+          <select v-model="settings.payments.paymentGateway" id="paymentGateway">
+            <option value="Momo">Momo</option>
+            <option value="VNPay">VNPay</option>
+            <option value="PayPal">PayPal</option>
+          </select>
+
+          <label for="subscriptionDuration">Thời gian hết hạn gói đăng ký:</label>
+          <input v-model="settings.payments.subscriptionDuration" id="subscriptionDuration" type="number" />
+        </div>
+
+        <!-- Tab: Phát trực tuyến -->
+        <div v-if="activeTab === 'streaming'">
+          <label for="videoQuality">Chất lượng video:</label>
+          <select v-model="settings.streaming.videoQuality" id="videoQuality">
+            <option value="480p">480p</option>
+            <option value="720p">720p</option>
+            <option value="1080p">1080p</option>
+            <option value="4K">4K</option>
+          </select>
+
+          <div class="switch-container">
+            <label>Hỗ trợ phụ đề & Thuyết minh</label>
+            <input v-model="settings.streaming.subtitles" type="checkbox" />
+          </div>
+        </div>
+
+        <!-- Tab: Hệ thống -->
+        <div v-if="activeTab === 'system'">
+          <div class="switch-container">
+            <label>Bảo trì hệ thống</label>
+            <input v-model="settings.system.maintenanceMode" type="checkbox" />
+          </div>
+
+          <label for="seoMetaTitle">Meta Title (SEO):</label>
+          <input v-model="settings.system.seoMetaTitle" id="seoMetaTitle" type="text" />
+
+          <label for="seoMetaDescription">Meta Description (SEO):</label>
+          <textarea v-model="settings.system.seoMetaDescription" id="seoMetaDescription"></textarea>
+        </div>
+
+        <button @click="saveSettings" class="save-btn">Lưu Cài Đặt</button>
       </div>
     </div>
-
-    <!-- Nội dung các tab cài đặt -->
-    <div class="tab-content">
-      <!-- Tab: Tài khoản Admin -->
-      <div v-if="activeTab === 'account'">
-        <label for="name">Tên Admin:</label>
-        <input v-model="settings.account.name" id="name" type="text" />
-
-        <label for="email">Email:</label>
-        <input v-model="settings.account.email" id="email" type="email" />
-
-        <label for="phone">Số điện thoại:</label>
-        <input v-model="settings.account.phone" id="phone" type="text" />
-
-        <label for="password">Mật khẩu:</label>
-        <input v-model="settings.account.password" id="password" type="password" />
-
-        <label for="role">Vai trò:</label>
-        <select v-model="settings.account.role" id="role">
-          <option value="Super Admin">Super Admin</option>
-          <option value="Moderator">Moderator</option>
-          <option value="Editor">Editor</option>
-        </select>
-
-        <div class="switch-container">
-          <label>Bật 2FA</label>
-          <input v-model="settings.account.enable2FA" type="checkbox" />
-        </div>
-      </div>
-
-      <!-- Tab: Giao diện -->
-      <div v-if="activeTab === 'appearance'">
-        <label for="logo">Logo:</label>
-        <input
-          @change="handleFileChange('logo', $event)"
-          id="logo"
-          type="file"
-        />
-
-        <label for="favicon">Favicon:</label>
-        <input
-          @change="handleFileChange('favicon', $event)"
-          id="favicon"
-          type="file"
-        />
-
-        <label for="theme">Chủ đề giao diện:</label>
-        <select v-model="settings.appearance.theme" id="theme">
-          <option value="light">Sáng</option>
-          <option value="dark">Tối</option>
-        </select>
-
-        <label for="layout">Bố cục:</label>
-        <select v-model="settings.appearance.layout" id="layout">
-          <option value="grid">Lưới</option>
-          <option value="list">Danh sách</option>
-        </select>
-      </div>
-
-      <!-- Tab: Bảo mật -->
-      <div v-if="activeTab === 'security'">
-        <label for="passwordPolicy">Chính sách mật khẩu:</label>
-        <textarea v-model="settings.security.passwordPolicy" id="passwordPolicy"></textarea>
-
-        <div class="switch-container">
-          <label>Chặn tài khoản vi phạm</label>
-          <input v-model="settings.security.blockViolation" type="checkbox" />
-        </div>
-      </div>
-
-      <!-- Tab: Thanh toán -->
-      <div v-if="activeTab === 'payments'">
-        <label for="paymentGateway">Cổng thanh toán:</label>
-        <select v-model="settings.payments.paymentGateway" id="paymentGateway">
-          <option value="Momo">Momo</option>
-          <option value="VNPay">VNPay</option>
-          <option value="PayPal">PayPal</option>
-        </select>
-
-        <label for="subscriptionDuration">Thời gian hết hạn gói đăng ký:</label>
-        <input v-model="settings.payments.subscriptionDuration" id="subscriptionDuration" type="number" />
-      </div>
-
-      <!-- Tab: Phát trực tuyến -->
-      <div v-if="activeTab === 'streaming'">
-        <label for="videoQuality">Chất lượng video:</label>
-        <select v-model="settings.streaming.videoQuality" id="videoQuality">
-          <option value="480p">480p</option>
-          <option value="720p">720p</option>
-          <option value="1080p">1080p</option>
-          <option value="4K">4K</option>
-        </select>
-
-        <div class="switch-container">
-          <label>Hỗ trợ phụ đề & Thuyết minh</label>
-          <input v-model="settings.streaming.subtitles" type="checkbox" />
-        </div>
-      </div>
-
-      <!-- Tab: Hệ thống -->
-      <div v-if="activeTab === 'system'">
-        <div class="switch-container">
-          <label>Bảo trì hệ thống</label>
-          <input v-model="settings.system.maintenanceMode" type="checkbox" />
-        </div>
-
-        <label for="seoMetaTitle">Meta Title (SEO):</label>
-        <input v-model="settings.system.seoMetaTitle" id="seoMetaTitle" type="text" />
-
-        <label for="seoMetaDescription">Meta Description (SEO):</label>
-        <textarea v-model="settings.system.seoMetaDescription" id="seoMetaDescription"></textarea>
-      </div>
-
-      <button @click="saveSettings" class="save-btn">Lưu Cài Đặt</button>
-    </div>
-  </div>
   </div>
 </template>
 
@@ -170,7 +138,7 @@
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const goBack = () => {
-  router.go(-1);    
+  router.go(-1);
 };
 export default {
   data() {
@@ -242,16 +210,19 @@ export default {
 .back-button:hover {
   background-color: #2980B9;
 }
+
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 /* Đặt background và padding chung cho toàn bộ trang */
 .settings-container {
   max-width: 900px;

@@ -1,39 +1,41 @@
 <template>
-    <div>
-        <button @click="goBack" class="back-button">← Quay lại</button>
-  <div class="content-management">
-    <h1>Quản lý Nội Dung</h1>
-    <div class="tabs">
-      <button @click="selectTab('articles')" :class="{ active: currentTab === 'articles' }">Bài viết và Đánh giá</button>
-      <button @click="selectTab('comments')" :class="{ active: currentTab === 'comments' }">Quản lý Bình luận</button>
-    </div>
-
-    <!-- Quản lý bài viết -->
-    <div v-if="currentTab === 'articles'" class="tab-content">
-      <h2>Quản lý Bài viết và Đánh giá</h2>
-      <form @submit.prevent="submitArticle" class="form">
-        <div class="form-group">
-          <label for="title">Tiêu đề bài viết</label>
-          <input type="text" id="title" v-model="article.title" placeholder="Nhập tiêu đề..." />
-        </div>
-        <div class="form-group">
-          <label for="content">Nội dung</label>
-          <textarea id="content" v-model="article.content" placeholder="Nhập nội dung bài viết hoặc đánh giá..."></textarea>
-        </div>
-        <button type="submit" class="submit-button">Lưu Bài viết</button>
-      </form>
-      <div class="article-list">
-        <h3>Danh sách Bài viết</h3>
-        <ul>
-          <li v-for="(article, index) in articles" :key="index">
-            <h4>{{ article.title }}</h4>
-            <p>{{ article.content }}</p>
-            <button @click="editArticle(index)" class="edit-button">Sửa</button>
-            <button @click="deleteArticle(index)" class="delete-button">Xóa</button>
-          </li>
-        </ul>
+  <div>
+    <button @click="goBack" class="back-button">← Quay lại</button>
+    <div class="content-management">
+      <h1>Quản lý Nội Dung</h1>
+      <div class="tabs">
+        <button @click="selectTab('articles')" :class="{ active: currentTab === 'articles' }">Bài viết và Đánh
+          giá</button>
+        <button @click="selectTab('comments')" :class="{ active: currentTab === 'comments' }">Quản lý Bình luận</button>
       </div>
-    </div>
+
+      <!-- Quản lý bài viết -->
+      <div v-if="currentTab === 'articles'" class="tab-content">
+        <h2>Quản lý Bài viết và Đánh giá</h2>
+        <form @submit.prevent="submitArticle" class="form">
+          <div class="form-group">
+            <label for="title">Tiêu đề bài viết</label>
+            <input type="text" id="title" v-model="article.title" placeholder="Nhập tiêu đề..." />
+          </div>
+          <div class="form-group">
+            <label for="content">Nội dung</label>
+            <textarea id="content" v-model="article.content"
+              placeholder="Nhập nội dung bài viết hoặc đánh giá..."></textarea>
+          </div>
+          <button type="submit" class="submit-button">Lưu Bài viết</button>
+        </form>
+        <div class="article-list">
+          <h3>Danh sách Bài viết</h3>
+          <ul>
+            <li v-for="(article, index) in articles" :key="index">
+              <h4>{{ article.title }}</h4>
+              <p>{{ article.content }}</p>
+              <button @click="editArticle(index)" class="edit-button">Sửa</button>
+              <button @click="deleteArticle(index)" class="delete-button">Xóa</button>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <!-- Quản lý bình luận -->
@@ -53,10 +55,10 @@
 
 <script setup>
 import { ref } from 'vue';
-import {useRouter} from 'vue-router';
+import { useRouter } from 'vue-router';
 const router = useRouter();
 const goBack = () => {
-  router.go(-1);    
+  router.go(-1);
 };
 
 // Tab hiện tại
@@ -116,7 +118,7 @@ const deleteComment = (index) => {
 
 <style scoped>
 .content-management {
-    max-width: 900px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 20px;
   background-color: #ffffff;
@@ -125,6 +127,7 @@ const deleteComment = (index) => {
   font-family: 'Arial', sans-serif;
   animation: fadeIn 1s ease-in-out;
 }
+
 .back-button {
   margin: 20px;
   background-color: #3498DB;
@@ -197,7 +200,8 @@ label {
   font-weight: bold;
 }
 
-input[type="text"], textarea {
+input[type="text"],
+textarea {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -206,7 +210,8 @@ input[type="text"], textarea {
   transition: border-color 0.3s ease;
 }
 
-input[type="text"]:focus, textarea:focus {
+input[type="text"]:focus,
+textarea:focus {
   border-color: #4CAF50;
   outline: none;
 }
@@ -225,12 +230,14 @@ input[type="text"]:focus, textarea:focus {
   background-color: #45a049;
 }
 
-.article-list ul, .comment-list {
+.article-list ul,
+.comment-list {
   list-style: none;
   padding: 0;
 }
 
-.article-list li, .comment-list li {
+.article-list li,
+.comment-list li {
   padding: 10px;
   border-bottom: 1px solid #ddd;
   margin-bottom: 10px;
@@ -264,11 +271,13 @@ input[type="text"]:focus, textarea:focus {
 .delete-button:hover {
   background-color: #C0392B;
 }
+
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
