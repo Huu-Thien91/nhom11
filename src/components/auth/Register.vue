@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 const form = ref({
   username: '',
@@ -9,6 +10,7 @@ const form = ref({
 });
 
 const errors = ref({});
+const successMessage = ref('');
 const router = useRouter();
 
 const validateForm = () => {
@@ -30,23 +32,58 @@ const validateForm = () => {
 
   return Object.keys(errors.value).length === 0;
 };
-const gotoLogin = () => {
-    router.push('/login');
-}
-const submitForm = () => {
-  if (validateForm()) {
-    console.log('Form đăng ký đã được gửi:', form.value);
-    // Gửi dữ liệu tới server hoặc xử lý đăng ký ở đây
 
-    // Điều hướng tới trang đăng nhập sau khi đăng ký thành công
-    router.push('/login');
-  }
+const gotoLogin = () => {
+  router.push('/login');
 };
+
+const submitForm = async () => {
+  try {
+    console.log('form.value: ', form.value);
+    const response = await fetch('http://localhost:26762/api/Users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: username.value,
+        email: email.value,
+        password: password.value,
+      }),
+    });
+    console.log(response);
+    //console.log('Đăng ký thành công:', response.data);
+
+    successMessage.value = 'Đăng ký thành công! Vui lòng đăng nhập.';
+
+    // setTimeout(() => {
+    //   router.push('/login');
+    // }, 2000);
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      console.log('Validation Errors:', error.response.data.errors);
+
+      const apiErrors = error.response.data.errors || {};
+      errors.value = {
+        username: apiErrors.username ? apiErrors.username[0] : '',
+        email: apiErrors.email ? apiErrors.email[0] : '',
+        password: apiErrors.password ? apiErrors.password[0] : ''
+      };
+    } else {
+      console.error('Lỗi không xác định:', error);
+    }
+  }
+
+};
+
 </script>
 
 <template>
   <div class="auth-container">
     <h1>Đăng Ký</h1>
+
+    <p class="success" v-if="successMessage">{{ successMessage }}</p>
+
     <form @submit.prevent="submitForm">
       <div class="form-group">
         <label for="username">Tên người dùng</label>
@@ -72,9 +109,17 @@ const submitForm = () => {
   </div>
 </template>
 
+
 <style scoped>
 @import "/src/assets/css/auth.css";
-.msg-error{
-    color: red;
+
+.msg-error {
+  color: red;
+}
+
+.success {
+  color: green;
+  font-weight: bold;
+  margin-bottom: 15px;
 }
 </style>

@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+
 const loginForm = ref({
   email: '',
   password: ''
@@ -25,26 +27,47 @@ const validateLoginForm = () => {
   return Object.keys(loginErrors.value).length === 0;
 };
 
-const submitLoginForm = () => {
+const submitLoginForm = async () => {
   if (validateLoginForm()) {
-    console.log('Form đăng nhập đã được gửi:', loginForm.value);
-    // Gửi dữ liệu tới server hoặc xử lý đăng nhập ở đây
-    router.push('/admin');
+    try {
+      const response = await fetch('http://localhost:5289/api/AdminUser/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: loginErrors.value.email,
+          password: loginErrors.value.password
+        }),
+      });
+
+      console.log('Đăng nhập thành công:', response.data);
+
+      // Điều hướng tới trang quản trị
+      router.push('/admin');
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        // Xử lý lỗi từ API
+        loginErrors.value = {
+          email: error.response.data.errors.email ? error.response.data.errors.email[0] : '',
+          password: error.response.data.errors.password ? error.response.data.errors.password[0] : ''
+        };
+      } else {
+        console.error('Lỗi không xác định:', error);
+      }
+    }
   }
 };
 
 const goToRegister = () => {
   router.push('/register');
 };
-const goToDashboard = () => {
-  router.push('/admin');
-};
 
 const forgotPassword = () => {
-  router.push('/forgotpassword')
-  // Logic cho quên mật khẩu
+  router.push('/forgotpassword');
   console.log('Quên mật khẩu');
 };
+
 </script>
 
 <template>
@@ -73,7 +96,8 @@ const forgotPassword = () => {
 
 <style scoped>
 @import "/src/assets/css/auth.css";
-.msg-error{
-    color: red;
+
+.msg-error {
+  color: red;
 }
 </style>

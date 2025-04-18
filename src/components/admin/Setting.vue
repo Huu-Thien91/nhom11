@@ -1,6 +1,19 @@
 <template>
-  <div>
-    <button @click="goBack" class="back-button">← Quay lại</button>
+  <div class="container">
+    <aside class="sidebar">
+      <h2>Bảng điều khiển</h2>
+      <ul>
+        <li><router-link to="/admin">Dashboard</router-link></li>
+        <li><router-link to="/admin/movies">Quản lý phim</router-link></li>
+        <li><router-link to="/admin/finance">Quản lí tài chính</router-link></li>
+        <li><router-link to="/admin/vipmanagenment">Quản lí tài khoản VIP và Thanh Toán</router-link></li>
+        <li><router-link to="/admin/account">Quản lí hệ thống và bảo mật (admin)</router-link></li>
+        <li><router-link to="/admin/user">Quản lí người dùng</router-link></li>
+        <li><router-link to="/admin/transactions">Lịch sử giao dịch</router-link></li>
+        <li><router-link to="/admin/setting">Cài đặt chung</router-link></li>
+        <li><router-link to="/login">Đăng xuất</router-link></li>
+      </ul>
+    </aside>
     <div class="settings-container">
       <!-- Thanh Tab chuyển đổi giữa các phần cài đặt -->
       <div class="settings-tabs">
@@ -135,11 +148,6 @@
 </template>
 
 <script>
-import { useRouter } from 'vue-router';
-const router = useRouter();
-const goBack = () => {
-  router.go(-1);
-};
 export default {
   data() {
     return {
@@ -187,6 +195,9 @@ export default {
         this.settings.appearance[field] = file;
       }
     },
+    goBack() {
+      this.$router.go(-1);
+    },
     saveSettings() {
       // Xử lý lưu cài đặt ở đây (ví dụ: gọi API để lưu lên server)
       console.log('Settings saved:', this.settings);
@@ -196,20 +207,7 @@ export default {
 </script>
 
 <style scoped>
-.back-button {
-  margin: 20px;
-  background-color: #3498DB;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.back-button:hover {
-  background-color: #2980B9;
-}
+@import "/src/assets/css/admin.css";
 
 @keyframes fadeIn {
   from {
@@ -225,13 +223,11 @@ export default {
 
 /* Đặt background và padding chung cho toàn bộ trang */
 .settings-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 120%;
   animation: fadeIn 1s ease-in-out;
 }
 

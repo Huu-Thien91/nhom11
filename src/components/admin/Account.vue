@@ -1,6 +1,18 @@
 <template>
-  <div>
-    <button @click="goBack" class="back-button">← Quay lại</button>
+<div class="container">
+  <aside class="sidebar">
+    <h2>Bảng điều khiển</h2>
+    <ul>
+      <li><router-link to="/admin">Dashboard</router-link></li>
+      <li><router-link to="/admin/movies">Quản lý phim</router-link></li>
+      <li><router-link to="/admin/vipmanagenment">Quản lí tài khoản VIP và Thanh Toán</router-link></li>
+      <li><router-link to="/admin/account">Quản lí hệ thống và bảo mật (admin)</router-link></li>
+      <li><router-link to="/admin/user">Quản lí người dùng</router-link></li>
+      <li><router-link to="/admin/transactions">Lịch sử giao dịch</router-link></li>
+      <li><router-link to="/admin/setting">Cài đặt chung</router-link></li>
+      <li><router-link to="/login">Đăng xuất</router-link></li>
+    </ul>
+  </aside>
   <div class="system-security-management">
     <h1>Quản lý Hệ thống & Bảo mật</h1>
 
@@ -96,9 +108,6 @@ const selectTab = (tab) => {
   currentTab.value = tab;
 };
 
-const goBack = () => {
-  router.go(-1);
-};
 
 const saveAdminRole = (admin) => {
   alert(`Quyền của "${admin.name}" đã được cập nhật thành: ${admin.role}`);
@@ -114,6 +123,7 @@ const backupData = () => {
 </script>
 
 <style scoped>
+@import "/src/assets/css/admin.css";
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
@@ -121,14 +131,12 @@ body {
 }
 
 .system-security-management {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
-  animation: fadeIn 1s ease-in-out;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 120%;
+  animation: fadeIn 1s ease-in-out
 }
 
 h1 {

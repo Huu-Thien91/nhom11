@@ -100,12 +100,12 @@ body {
 }
 
 .overview-dashboard {
-  max-width: 1200px;
   margin: 20px auto;
   padding: 20px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 70%;
 }
 
 h1 {
